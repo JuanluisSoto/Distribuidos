@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <script>
+
+    function getAWSKeys() {
+      var asd = $.get(
+        "https://x6mwmzentymsoucxza4omyzebu0kyqbt.lambda-url.us-east-1.on.aws/",
+        {},
+        function (data) {
+
+          var json = data;
+          //        json=JSON.parse(json);
+          document.getElementById("Policy").value = json.stringToSign;
+          document.getElementById("X-Amz-Credential").value = json.xAmzCredential;
+          document.getElementById("X-Amz-Date").value = json.amzDate;
+          document.getElementById("X-Amz-Signature").value = json.stringSigned;
+          document.getElementById("X-Amz-Security-Token").value = json.securityToken;
+
+        }
+      )
+
+    }
+
+    function setKeyFilename() {
+      // alert( "Enviando!" );
+
+      document.getElementById("key").value = document.getElementById("file").value.substring(document.getElementById("file").value.lastIndexOf('\\') + 1);
+
+      var post = document.getElementById("post").value;
+      var file = document.getElementById("key").value;
+
+      var usuarioJSON = localStorage.getItem('usuario');
+      // Convierte la cadena JSON de vuelta a un objeto
+      var usuario = JSON.parse(usuarioJSON);
+      var user = usuario.nombre;
+      
+
+      console.log("key: ", post, " file: ", file);
+      var sendPost = $.post(
+        "https://fau7uzvpr33esftb6fncsemsje0vbxsj.lambda-url.us-east-1.on.aws/",
+
+        { user: user, comment: post, attachment: file },
+        function (data) {
+
+          function jsonEscape(str) {
+            return str.replace(/\n/g, "\\\\n").replace(/\r/g, "\\\\r").replace(/\t/g, "\\\\t").replace(/\\/g, "");
+          }
+
+          var json = data;
+          // alert('resultado ' + JSON.stringify(json));
+
+        }
+      )
+        .done(function () {
+          alert("second success");
+        })
+        .fail(function (xhr, status, error) {
+          alert(error);
+        })
+
+      sendPost.always(function () {
+        alert("second finished");
+      });
+
+    }
+
+
+  </script>
+
+
+
+</head>
+
+<body onload="getAWSKeys()">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">Twitter</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="https://samanta.barros.sisdis2023.s3.us-east-1.amazonaws.com/readPosts.html">Inicio
+            <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="https://samanta.barros.sisdis2023.s3.us-east-1.amazonaws.com/readPostUser.html">Ver tus posts</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link"
+            href="https://samanta.barros.sisdis2023.s3.us-east-1.amazonaws.com/postComment.html">publicar mensaje</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="https://samanta.barros.sisdis2023.s3.us-east-1.amazonaws.com/login.html">login</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link"
+            href="https://samanta.barros.sisdis2023.s3.us-east-1.amazonaws.com/Register.html">Registrarse</a>
+        </li>
+        <!-- Puedes agregar más elementos según sea necesario -->
+      </ul>
+    </div>
+  </nav>
+
+
+
+  <div class="container mt-5">
+    <label for="post">Escribe un mensaje:</label>
+    <textarea class="form-control" id="post" name="post" rows="5" placeholder="¿Qué está pasando?" required></textarea>
+  
+    <form action="https://samanta.barros.sisdis2023.s3.us-east-1.amazonaws.com/" onsubmit="setKeyFilename()" method="post" enctype="multipart/form-data">
+      <div class="form-group">
+        <input type="hidden" id="X-Amz-Credential" name="X-Amz-Credential" value="" />
+        <input type="hidden" id="X-Amz-Date" name="X-Amz-Date" value="" />
+        <input type="hidden" id="Policy" name="Policy" value="" />
+        <input type="hidden" id="X-Amz-Signature" name="X-Amz-Signature" value="" />
+        <input type="hidden" id="key" name="key" value="fichero.sln" />
+        <input type="hidden" name="acl" value="public-read" />
+        <input type="hidden" name="success_action_redirect" value="https://samanta.barros.sisdis2023.s3.us-east-1.amazonaws.com/readPosts.html" />
+        <input type="hidden" name="X-Amz-Algorithm" value="AWS4-HMAC-SHA256" />
+        <input type="hidden" id="X-Amz-Security-Token" name="X-Amz-Security-Token" value="" />
+      </div>
+  
+      <div class="form-group">
+        <label for="file">Selecciona un archivo:</label>
+        <input type="file" class="form-control-file" name="file" id="file" accept="video/mp4,image/png" required>
+      </div>
+  
+      <button type="submit" class="btn btn-primary">Subir Archivo</button>
+    </form>
+
+</body>
+
+</html>

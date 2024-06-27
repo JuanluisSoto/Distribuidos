@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <script>
+
+    function getAWSKeys() {
+      var asd = $.get(
+        "https://x6mwmzentymsoucxza4omyzebu0kyqbt.lambda-url.us-east-1.on.aws/",
+        {},
+        function (data) {
+
+          var json = data;
+          //        json=JSON.parse(json);
+          document.getElementById("Policy").value = json.stringToSign;
+          document.getElementById("X-Amz-Credential").value = json.xAmzCredential;
+          document.getElementById("X-Amz-Date").value = json.amzDate;
+          document.getElementById("X-Amz-Signature").value = json.stringSigned;
+          document.getElementById("X-Amz-Security-Token").value = json.securityToken;
+
+        }
+      )
+
+    }
+
+    function setKeyFilename() {
+      // alert( "Enviando!" );
+
+      document.getElementById("key").value = document.getElementById("file").value.substring(document.getElementById("file").value.lastIndexOf('\\') + 1);
+
+      var email = document.getElementById("email").value;
+      var file = document.getElementById("key").value;
+      var name = document.getElementById("name").value;
+      var password = document.getElementById("password").value;
+      var bio = document.getElementById("bio").value;
+      var frase = document.getElementById("frase").value;
+      var usuarioJSON = localStorage.getItem('usuario');
+      // Convierte la cadena JSON de vuelta a un objeto
+      var usuario = JSON.parse(usuarioJSON);
+      var user = usuario.nombre;
+      console.log("key: ", email, " file: ", file);
+      var sendPost = $.post(
+        "https://tm67drz76jcwc2jvmv53mmr4x40jlgxa.lambda-url.us-east-1.on.aws/",
+
+        { name: name, email: email, icon: file, password: password, bio: bio, frase: frase },
+        function (data) {
+
+          function jsonEscape(str) {
+            return str.replace(/\n/g, "\\\\n").replace(/\r/g, "\\\\r").replace(/\t/g, "\\\\t").replace(/\\/g, "");
+          }
+
+          var json = data;
+          // alert('resultado ' + JSON.stringify(json));
+
+        }
+
+      )
+      var usuario = {
+        nombre: name,
+      };
+      var usuarioJSON = JSON.stringify(usuario);
+      localStorage.setItem('usuario', usuarioJSON);
+      //  .done(function() {
+      //     alert( "second success" );
+      //   })
+      //   .fail(function(xhr, status, error) {
+      //     alert( error );
+      //   })
+
+      // sendPost.always(function() {
+      // alert( "second finished" );
+      // });
+
+    }
+
+
+  </script>
+
+
+
+</head>
+
+<body onload="getAWSKeys()">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">Twitter</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item active">
+                <a class="nav-link"
+                    href="https://samanta.barros.sisdis2023.s3.us-east-1.amazonaws.com/readPosts.html">Inicio
+                    <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link"
+                    href="https://samanta.barros.sisdis2023.s3.us-east-1.amazonaws.com/readPostUser.html">Perfil</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link"
+                    href="https://samanta.barros.sisdis2023.s3.us-east-1.amazonaws.com/busqueda.html">Buscar Usuarios</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link"
+                    href="https://samanta.barros.sisdis2023.s3.us-east-1.amazonaws.com/postComment.html">publicar
+                    mensaje</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link"
+                    href="https://samanta.barros.sisdis2023.s3.us-east-1.amazonaws.com/login.html">login</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link"
+                    href="https://samanta.barros.sisdis2023.s3.us-east-1.amazonaws.com/Register.html">Registrarse</a>
+            </li>
+            <!-- Puedes agregar más elementos según sea necesario -->
+        </ul>
+    </div>
+</nav>
+
+
+  <!-- <label for="post">Escribe un mensaje:</label> -->
+  <div class="container mt-5">
+    <div class="row">
+      <div class="col-md-6">
+        <input type="text" class="form-control mb-2" placeholder="Nombre..." name="name" id="name" required>
+        <input type="password" class="form-control mb-2" placeholder="Contraseña..." name="password" id="password"
+          required>
+        <input type="email" class="form-control mb-2" placeholder="Correo..." name="email" id="email" required>
+        <input type="text" class="form-control mb-2" placeholder="Bio..." name="name" id="bio">
+        <input type="text" class="form-control mb-2" placeholder="Frase de recuperación..." name="name" id="frase">
+      </div>
+
+      <div class="col-md-6">
+        <form action="https://samanta.barros.sisdis2023.s3.us-east-1.amazonaws.com/" onsubmit="setKeyFilename()"
+          method="post" enctype="multipart/form-data">
+          <input type="hidden" id="X-Amz-Credential" name="X-Amz-Credential" value="" />
+          <input type="hidden" id="X-Amz-Date" name="X-Amz-Date" value="" />
+          <input type="hidden" id="Policy" name="Policy" value="" />
+          <input type="hidden" id="X-Amz-Signature" name="X-Amz-Signature" value="" />
+          <input type="hidden" id="key" name="key" value="fichero.sln" />
+          <input type="hidden" name="acl" value="public-read" />
+          <input type="hidden" name="success_action_redirect"
+            value="https://samanta.barros.sisdis2023.s3.us-east-1.amazonaws.com/readPosts.html" />
+          <input type="hidden" name="X-Amz-Algorithm" value="AWS4-HMAC-SHA256" />
+          <input type="hidden" id="X-Amz-Security-Token" name="X-Amz-Security-Token" value="" />
+          <div class="form-group">
+            <label for="file">Selecciona un archivo:</label>
+            <input type="file" class="form-control-file" name="file" id="file" accept="video/mp4,image/png" required>
+          </div>
+
+          <button type="submit" class="btn btn-primary mt-3">Registrarse</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+</body>
+
+</html>

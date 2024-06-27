@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        var bucketurl = "https://samanta.barros.sisdis2023.s3.us-east-1.amazonaws.com/";
+        var contVideo = 0;
+        var contImg = 0;
+        function busqueda() {
+            var user = document.getElementById("busqueda").value;
+            document.getElementById("titulo").innerHTML = user;
+            var sendPost = $.post(
+                "https://5qy4h5rbrsgslfryba6rhbkuai0zscff.lambda-url.us-east-1.on.aws/",
+
+                { user: user },
+                function (data) {
+                    const user = document.getElementById("busqueda").value;
+                    document.getElementById("titulo").innerHTML = user;
+
+                    // Limpiar lista de comentarios antes de hacer una nueva búsqueda
+                    const commentList = document.getElementById("comment_list");
+                    commentList.innerHTML = '';
+                    var json = data;
+                    // alert('resultado ' + JSON.stringify(json));
+                    for (let i in json.posts) {
+                        var ul = document.getElementById("comment_list");
+                        var li = document.createElement("li");
+                        var comment = document.createElement("p");
+                        comment.innerText = user + " dice: " + json.posts[i].comment;
+
+                        if (json.posts[i].tipo == "img") {
+                            var image = document.createElement("img");
+                            image.setAttribute("width", "320");
+                            image.setAttribute("height", "320");
+                            image.setAttribute("src", bucketurl + json.posts[i].attachment);
+                            ul.appendChild(li);
+                            li.appendChild(comment);
+                            li.appendChild(image);
+                            contImg++;
+                        } else {
+                            var video = document.createElement("video");
+                            video.setAttribute("width", "320");
+                            video.setAttribute("height", "320");
+                            video.setAttribute("controls", "");
+
+                            var source = document.createElement("source");
+                            source.setAttribute("src", bucketurl + json.posts[i].attachment);
+                            // source.setAttribute("type", "video/mp4");
+                            video.appendChild(source);
+                            ul.appendChild(li);
+                            li.appendChild(comment);
+                            li.appendChild(video);
+                            contVideo++;
+                        }
+
+
+                    }
+                }
+            )
+            var sendPost2 = $.post(
+                "https://q3dpodykgk743rxh5zqeucniyu0cblln.lambda-url.us-east-1.on.aws/",
+                function (data) {
+                    let email = "err";
+                    let bio = "err";
+                    let avatar = "err";
+                    let img;
+                    // function jsonEscape(str)  {
+                    //          return str.replace(/\n/g, "\\\\n").replace(/\r/g, "\\\\r").replace(/\t/g, "\\\\t").replace(/\\/g,"");
+                    // }
+                    var json = data;
+                    // alert('resultado ' + JSON.stringify(json));
+                    for (let i in json.posts) {
+                        // alert(json.post[i].name);
+                        if (user == json.posts[i].name) {
+                            // alert("funciona", json.posts[i].email);
+                            email = json.posts[i].email;
+                            bio = json.posts[i].bio;
+                            avatar = json.posts[i].avatar;
+                        }
+                    }
+                    document.getElementById("email").innerHTML = email;
+                    document.getElementById("bio").innerHTML = bio;
+                    img = document.getElementById("avatar");
+                    img.src = "https://samanta.barros.sisdis2023.s3.us-east-1.amazonaws.com/" + avatar;
+                    img.setAttribute("width", "120");
+                    img.setAttribute("height", "120");
+
+                    // document.getElementById("phrase").innerHTML=phrase;
+                    // document.getElementById("titulo").innerHTML=user;
+                }
+            )
+
+        };
+
+    </script>
+
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Twitter</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link"
+                        href="https://samanta.barros.sisdis2023.s3.us-east-1.amazonaws.com/readPosts.html">Inicio
+                        <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link"
+                        href="https://samanta.barros.sisdis2023.s3.us-east-1.amazonaws.com/readPostUser.html">Perfil</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link"
+                        href="https://samanta.barros.sisdis2023.s3.us-east-1.amazonaws.com/busqueda.html">Buscar
+                        Usuarios</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link"
+                        href="https://samanta.barros.sisdis2023.s3.us-east-1.amazonaws.com/postComment.html">publicar
+                        mensaje</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link"
+                        href="https://samanta.barros.sisdis2023.s3.us-east-1.amazonaws.com/login.html">login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link"
+                        href="https://samanta.barros.sisdis2023.s3.us-east-1.amazonaws.com/Register.html">Registrarse</a>
+                </li>
+                <!-- Puedes agregar más elementos según sea necesario -->
+            </ul>
+        </div>
+    </nav>
+
+
+
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col">
+                <input type="text" id="busqueda" placeholder="Busca un usuario:" />
+            </div>
+            <div class="col">
+                <button onclick="busqueda()">Buscar</button>
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-2">
+                <img id="avatar" class="img-fluid rounded" alt="Avatar">
+            </div>
+            <div class="col-10">
+                <h1 id="titulo" class="h2">User:</h1>
+                <h3 id="email" class="text-muted">prueba@gmail.com</h3>
+                <h4 id="bio" class="text-muted">bio</h3>
+            </div>
+        </div>
+
+        <h2 class="mt-4">Posts:</h2>
+        <ul id="comment_list" class="list-unstyled">
+            <!-- Los posts se agregarán dinámicamente aquí -->
+        </ul>
+    </div>
+    <!-- <li>
+    <p> Comentario 1</p>
+    <video width="320" height="240" controls>
+    <source src="https://utadbucket1.s3.us-east-1.amazonaws.com/dp1.mp4" type="video/mp4">
+ 
+    Your browser does not support the video tag.
+    </video>
+  </li>
+  <li>
+    <p> Comentario 2</p>
+    <video width="320" height="240" controls>
+    <source src="https://utadbucket1.s3.us-east-1.amazonaws.com/dp1.mp4" type="video/mp4">
+ 
+    Your browser does not support the video tag.
+    </video>
+  </li>
+  <li>
+    <p> Comentario 3</p>
+    <video width="320" height="240" controls>
+    <source src="https://utadbucket1.s3.us-east-1.amazonaws.com/dp1.mp4" type="video/mp4">
+ 
+    Your browser does not support the video tag.
+    </video>
+  </li>
+  -->
+    </ul>
+</body>
