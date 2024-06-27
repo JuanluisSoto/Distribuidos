@@ -1,0 +1,4 @@
+C:/Users/juanl/Documents/GitHub/WorkSpace/Universidad/Tercero_INSO/Primer_Cuatri/Sistemas Distribuidos/Entrega 1/fileManager/out/build/x64-Debug/CMakeFiles/serverFilemanager.dir
+C:/Users/juanl/Documents/GitHub/WorkSpace/Universidad/Tercero_INSO/Primer_Cuatri/Sistemas Distribuidos/Entrega 1/fileManager/out/build/x64-Debug/CMakeFiles/clientFilemanager.dir
+C:/Users/juanl/Documents/GitHub/WorkSpace/Universidad/Tercero_INSO/Primer_Cuatri/Sistemas Distribuidos/Entrega 1/fileManager/out/build/x64-Debug/CMakeFiles/edit_cache.dir
+C:/Users/juanl/Documents/GitHub/WorkSpace/Universidad/Tercero_INSO/Primer_Cuatri/Sistemas Distribuidos/Entrega 1/fileManager/out/build/x64-Debug/CMakeFiles/rebuild_cache.dir

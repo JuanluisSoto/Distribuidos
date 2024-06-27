@@ -1,0 +1,69 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"jsonFile" : "directory-.-Debug-d0094a50bb2071803777.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "2.8.11"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "multMatrixClient",
+					"targetIndexes" : 
+					[
+						0,
+						1
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "multMatrixClient::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-multMatrixClient-Debug-ec66050fd145dcff575d.json",
+					"name" : "multMatrixClient",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "multMatrixServer::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-multMatrixServer-Debug-d87c96f68918659a4e87.json",
+					"name" : "multMatrixServer",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "C:/Users/juanl/Documents/GitHub/WorkSpace/Universidad/Tercero_INSO/Primer_Cuatri/Sistemas Distribuidos/Entrega 1/multMatrix/out/build/x64-Debug",
+		"source" : "C:/Users/juanl/Documents/GitHub/WorkSpace/Universidad/Tercero_INSO/Primer_Cuatri/Sistemas Distribuidos/Entrega 1/multMatrix"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 6
+	}
+}
